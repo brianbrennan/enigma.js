@@ -1,7 +1,7 @@
 //settings
 
-var sequence = 'alpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'BCDRTMNO';
+var sequence = 'ascii'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
+var rotorSettings = 'boom';
 var plugSettings = ['ZT','HE'];
 
 //functions
@@ -9,6 +9,8 @@ var plugSettings = ['ZT','HE'];
 function enigmate(s){
 	if(typeof s !== 'string')
 		return 'Must send a string';
+
+	var l = checkCrypt(s);
 
 	var message = "";
 
@@ -22,7 +24,29 @@ function enigmate(s){
 		message = message + r;
 	}
 
+	console.log(l);
 	return message;
+}
+
+function checkCrypt(s){
+	var crypt = "";
+
+	s = s.substr(s.length - 2, 2);
+
+	for(var i = 0; i < s.length; i++){
+		var r = s.charAt(i);
+		for(var j = 0; j < rotorSettings.length; j++){
+			r = rotorize(r);
+		}
+		r = plugify(r);
+		atRotor = 0;
+		crypt = crypt + r;
+	}
+
+	if(crypt === 'en')
+		return true;
+
+	return false;
 }
 
 var atRotor = 0;
@@ -30,50 +54,22 @@ var atRotor = 0;
 function rotorize(c){//provides functionality of a single rotor 
 	if(typeof c !== 'string')
 		return 'Must send a string';
-	if(c.length > 1)
+	if(c.length > 1){
+		console.log(c);
 		return 'Must only send one letter at a time';
+	}
 	if(sequence === 'capAlpha'){
 
-		var n = rotorSettings[atRotor].charCodeAt(0);
-		atRotor++;
-		var k = c.charCodeAt(0);
-
-		if(k >= 65 && k <= 90){//checks if alphabet upper
-
-			n = n - 65;
-			k = k - 65;
-
-			var out = String.fromCharCode((k + n) % 26 + 65);
-
-			return out;
-
-		} else {
-			return 'Not an uppercase alpha character';
-		}
+		
 	} else if(sequence === 'alpha'){
 
+		
+	} else if(sequence === 'ascii'){
 		var n = rotorSettings[atRotor].charCodeAt(0);
 		atRotor++;
 		var k = c.charCodeAt(0);
 
-		if(k >= 65 && k <= 90){//checks if alphabet upper
-
-			n = n - 65;
-			k = k - 65;
-
-			var out = String.fromCharCode((k + n) % 26 + 65);
-
-		} else if(k >= 97 && k <= 122) {
-			n = n - 97;
-			k = k - 97;
-
-			var out = String.fromCharCode((k + n) % 26 + 97);
-
-		} else {
-			return 'Not an alpha character';
-		}
-
-		return out;
+		return String.fromCharCode((k + n) % 256);
 	}
 }//end of rotorize
 
@@ -90,4 +86,4 @@ function plugify(c){
 
 
 
-console.log(enigmate('WELCOMETOTHEJUNGLE'));
+console.log(enigmate('Hey, how ya doing'));
