@@ -1,7 +1,7 @@
 //settings
 
 var sequence = 'capAlpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'W';
+var rotorSettings = 'ARDMQU';
 
 //functions
 
@@ -39,7 +39,6 @@ function rotorize(c){//provides functionality of a single rotor
 
 		var k = c.charCodeAt(0);
 		var n = rotorSettings.charCodeAt(atRotor);
-		atRotor++;
 
 		//ERROR HANDLING
 		if(!(k >= 65 && k <= 90 || k == 32))
@@ -52,7 +51,11 @@ function rotorize(c){//provides functionality of a single rotor
 		k = k - 65;
 		n = n - 65;
 
-		var out = String.fromCharCode((k + n) % 26 + 65);
+		var pos = (k + n) % 26;
+
+		var out = crypt(pos);
+
+		atRotor++;
 
 		return out;
 
@@ -60,6 +63,12 @@ function rotorize(c){//provides functionality of a single rotor
 	}
 
 }//end of rotorize
+
+function crypt(n){
+	var h = rotorSettings(atRotor);
+
+	return h.fromCharCode(n + 65);
+}
 
 
 
@@ -78,7 +87,7 @@ function deEnigmate(s){
 			for(var j = rotorSettings.length - 1; j >= 0; j--){
 				r = deRotorize(r);
 			}
-			
+
 			message = message + r;
 		}
 
@@ -116,6 +125,10 @@ function deRotorize(c){
 	}
 }//end of deRotorize
 
-var message = "WELCOME TO THE JUNGLE BABY YOURE GONNA DIE";
+function deAlphCrypt(){
+	
+}
+
+var message = "HI HOW ARE YOU";
 console.log(enigmate(message));
 console.log(deEnigmate(enigmate(message)));
