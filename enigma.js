@@ -10,8 +10,6 @@ function enigmate(s){
 	if(typeof s !== 'string')
 		return 'Must send a string';
 
-	var l = checkCrypt(s);
-
 	var message = "";
 
 	for(var i = 0; i < s.length; i++){
@@ -24,29 +22,7 @@ function enigmate(s){
 		message = message + r;
 	}
 
-	console.log(l);
 	return message;
-}
-
-function checkCrypt(s){
-	var crypt = "";
-
-	s = s.substr(s.length - 2, 2);
-
-	for(var i = 0; i < s.length; i++){
-		var r = s.charAt(i);
-		for(var j = 0; j < rotorSettings.length; j++){
-			r = rotorize(r);
-		}
-		r = plugify(r);
-		atRotor = 0;
-		crypt = crypt + r;
-	}
-
-	if(crypt === 'en')
-		return true;
-
-	return false;
 }
 
 var atRotor = 0;
@@ -55,7 +31,6 @@ function rotorize(c){//provides functionality of a single rotor
 	if(typeof c !== 'string')
 		return 'Must send a string';
 	if(c.length > 1){
-		console.log(c);
 		return 'Must only send one letter at a time';
 	}
 	if(sequence === 'capAlpha'){
