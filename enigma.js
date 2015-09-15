@@ -1,8 +1,8 @@
 //settings
 
 var sequence = 'capAlpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'C';
-var plugSettings = ['NP','FE'];
+var rotorSettings = 'WELCOMEHOME';
+var plugSettings = ['NP','FE', 'MO', 'ZT', 'RA'];
 
 //functions
 
@@ -19,7 +19,7 @@ function enigmate(s){
 				r = rotorize(r);
 			}
 			atRotor = 0;
-			// r = plugify(r);
+			r = plugify(r);
 			message = message + r;
 		}
 
@@ -100,11 +100,10 @@ function deEnigmate(s){
 
 			var r = s.charAt(i);
 			atRotor = rotorSettings.length - 1;
-
+			r = dePlugify(r);
 			for(var j = rotorSettings.length - 1; j >= 0; j--){
 				r = deRotorize(r);
 			}
-			// r = dePlugify(r);
 			message = message + r;
 		}
 
@@ -125,26 +124,16 @@ function deRotorize(c){
 		var k = c.charCodeAt(0);
 		var n = rotorSettings.charCodeAt(atRotor);
 
-
 		atRotor--;
-
-		console.log(k,n);
-
-		// k = k - 65;
-		// n = n - 65;
-
-		// var out = String.fromCharCode((k + n) % 26 + 65);
-
-		// return out;
 
 		k = k - 65;
 		n = n - 65;
 
-		console.log(k + " " + n + '\n');
+		if(k - n > 0)
+			return String.fromCharCode((k - n) % 26 + 65);
+		else 
+			return String.fromCharCode((k - n + 26) % 26 + 65);
 
-		var out = String.fromCharCode((k - n) % 26 + 65);
-		
-		return out;
 		//end of capAlpha
 	}
 }//end of deRotorize
@@ -158,7 +147,7 @@ function dePlugify(c){
 
 		var k = c.charCodeAt(0);
 
-		for(var i = 0; i < plugSettings.length; i++){
+		for(var i = plugSettings.length - 1; i >= 0; i--){
 
 			var t = plugSettings[i].charAt(1);
 
@@ -166,8 +155,8 @@ function dePlugify(c){
 				throw new Error('Can only use capital letters in PLUG SETTINGS when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your plug settings to be only cap letters');
 			if(t === plugSettings[i].charAt(0))
 				throw new Error('Must use a different letter to connect to in PLUG SETTINGS');
-			if(c === plugSettings[i].charAt(0)){
-				return t;
+			if(c === t){
+				return plugSettings[i].charAt(0);
 			}
 		}
 	}
