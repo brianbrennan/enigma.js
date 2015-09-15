@@ -1,7 +1,8 @@
 //settings
 
 var sequence = 'alpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = ['B'];
+var rotorSettings = 'BCDRTMNO';
+var plugSettings = ['ZT','HE'];
 
 //functions
 
@@ -16,6 +17,8 @@ function enigmate(s){
 		for(var j = 0; j < rotorSettings.length; j++){
 			r = rotorize(r);
 		}
+		r = plugify(r);
+		atRotor = 0;
 		message = message + r;
 	}
 
@@ -74,6 +77,17 @@ function rotorize(c){//provides functionality of a single rotor
 	}
 }//end of rotorize
 
+function plugify(c){
+	for(var i = 0; i < plugSettings.length; i++){
+		if(plugSettings[i].charAt(0) === plugSettings[i].charAt(1))
+			return 'Plug must go into a different letter';
+		if(c == plugSettings[i].charAt(0))
+			return plugSettings[i].charAt(1);
+	}
+
+	return c;
+}//end of plugify
 
 
-console.log(enigmate('mom'));
+
+console.log(enigmate('WELCOMETOTHEJUNGLE'));
