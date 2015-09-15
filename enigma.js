@@ -1,64 +1,65 @@
 //settings
 
-var sequence = 'ascii'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'boom';
+var sequence = 'capAlpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
+var rotorSettings = 'WELCOME';
 var plugSettings = ['ZT','HE'];
 
 //functions
 
 function enigmate(s){
-	if(typeof s !== 'string')
-		return 'Must send a string';
+	try{
+		if(typeof s !== 'string')
+			throw new Error('Must be a string!');
 
-	var message = "";
+		var message = "";
 
-	for(var i = 0; i < s.length; i++){
-		var r = s.charAt(i);
-		for(var j = 0; j < rotorSettings.length; j++){
+		for(var i = 0; i < s.length; i++){
+			var r = s.charAt(i);
 			r = rotorize(r);
+			message = message + r;
 		}
-		r = plugify(r);
-		atRotor = 0;
-		message = message + r;
-	}
 
-	return message;
-}
+		return message;
+
+	} catch(e){
+		console.log('Error: ' + e.message);
+	}
+}//end of enigmate
 
 var atRotor = 0;
 
-function rotorize(c){//provides functionality of a single rotor 
+function rotorize(c){//provides functionality of a single rotor
 	if(typeof c !== 'string')
-		return 'Must send a string';
-	if(c.length > 1){
-		return 'Must only send one letter at a time';
-	}
+		throw new Error('Must enter a single character string into rotorize!');
+	if(c.length > 1)
+		throw new Error('Must only enter one character!');
 	if(sequence === 'capAlpha'){
 
-		
-	} else if(sequence === 'alpha'){
-
-		
-	} else if(sequence === 'ascii'){
-		var n = rotorSettings[atRotor].charCodeAt(0);
-		atRotor++;
 		var k = c.charCodeAt(0);
+		var n = rotorSettings.charCodeAt(atRotor);
 
-		return String.fromCharCode((k + n) % 256);
+		//ERROR HANDLING
+		if(!(k >= 65 && k <= 90))
+			throw new Error('Can only ROTORIZE capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
+		if(!(n >= 65 && n <= 90))
+			throw new Error('Can only use capital letters in Rotor Settings when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your Rotor Settings to be only cap letters');
+
+		k = k - 65;
+		n = n - 65;
+
+		var out = String.fromCharCode((k + n) % 26 + 65);
+
+		return out;
+
+		//end of capAlpha
 	}
+
 }//end of rotorize
 
 function plugify(c){
-	for(var i = 0; i < plugSettings.length; i++){
-		if(plugSettings[i].charAt(0) === plugSettings[i].charAt(1))
-			return 'Plug must go into a different letter';
-		if(c == plugSettings[i].charAt(0))
-			return plugSettings[i].charAt(1);
-	}
-
-	return c;
+	
 }//end of plugify
 
 
 
-console.log(enigmate('Hey, how ya doing'));
+console.log(enigmate("BOOM"));
