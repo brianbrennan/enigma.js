@@ -2,7 +2,7 @@
 
 var sequence = 'capAlpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
 var rotorSettings = 'WELCOME';
-var plugSettings = ['ZT','HE'];
+var plugSettings = ['SP','FE'];
 
 //functions
 
@@ -15,7 +15,11 @@ function enigmate(s){
 
 		for(var i = 0; i < s.length; i++){
 			var r = s.charAt(i);
-			r = rotorize(r);
+			for(var j = 0; j < rotorSettings.length; j++){
+				r = rotorize(r);
+			}
+			atRotor = 0;
+			r = plugify(r);
 			message = message + r;
 		}
 
@@ -37,6 +41,7 @@ function rotorize(c){//provides functionality of a single rotor
 
 		var k = c.charCodeAt(0);
 		var n = rotorSettings.charCodeAt(atRotor);
+		atRotor++;
 
 		//ERROR HANDLING
 		if(!(k >= 65 && k <= 90))
@@ -57,7 +62,30 @@ function rotorize(c){//provides functionality of a single rotor
 }//end of rotorize
 
 function plugify(c){
-	
+	if(typeof c !== 'string')
+		throw new Error('Must enter a single character string into rotorize!');
+	if(c.length > 1)
+		throw new Error('Must only enter one character!');
+	if(sequence === 'capAlpha'){
+
+		var k = c.charCodeAt(0);
+
+		if(!(k >= 65 && k <= 90))
+			throw new Error('Can only PLUGIFY capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
+
+		for(var i = 0; i < plugSettings.length; i++){
+			var t = plugSettings[i].charAt(1);
+
+			if(!(t.charCodeAt(0) >= 65 && t.charCodeAt(0) <= 90))
+				throw new Error('Can only use capital letters in PLUG SETTINGS when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your plug settings to be only cap letters');
+			if(t === plugSettings[i].charAt(0))
+				throw new Error('Must use a different letter to connect to in PLUG SETTINGS');
+			if(c === plugSettings[i].charAt(0)){
+				return t;
+			}
+		}
+	}
+	return c;
 }//end of plugify
 
 
