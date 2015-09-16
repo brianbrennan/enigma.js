@@ -1,134 +1,84 @@
+
 //settings
-
-var sequence = 'capAlpha'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'ARDMQU';
-
-//functions
-
-function enigmate(s){
-	try{
-		if(typeof s !== 'string')
-			throw new Error('Must be a string!');
-
-		var message = "";
-
-		for(var i = 0; i < s.length; i++){
-			var r = s.charAt(i);
-			for(var j = 0; j < rotorSettings.length; j++){
-				r = rotorize(r);
-			}
-			atRotor = 0;
-			message = message + r;
-		}
-
-		return message;
-
-	} catch(e){
-		console.log('Error: ' + e.message);
-	}
-}//end of enigmate
-
+var rotorSettings = 'OEL';
 var atRotor = 0;
 
-function rotorize(c){//provides functionality of a single rotor
-	if(typeof c !== 'string')
-		throw new Error('Must enter a single character string into rotorize!');
-	if(c.length > 1)
-		throw new Error('Must only enter one character!');
-	if(sequence === 'capAlpha'){
 
-		var k = c.charCodeAt(0);
-		var n = rotorSettings.charCodeAt(atRotor);
+function enigmate(s){
 
-		//ERROR HANDLING
-		if(!(k >= 65 && k <= 90 || k == 32))
-			throw new Error('Can only ROTORIZE capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
-		if(!(n >= 65 && n <= 90))
-			throw new Error('Can only use capital letters in Rotor Settings when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your Rotor Settings to be only cap letters');
-		if(k == 32)
-			return " ";
+	//this is where the functionality of the parts should go
 
-		k = k - 65;
-		n = n - 65;
+	var message = "";
 
-		var pos = (k + n) % 26;
+	for(var i = 0; i < s.length; i++){
 
-		var out = crypt(pos);
+		var r = s[i];
 
-		atRotor++;
-
-		return out;
-
-		//end of capAlpha
-	}
-
-}//end of rotorize
-
-function crypt(n){
-	var h = rotorSettings(atRotor);
-
-	return h.fromCharCode(n + 65);
-}
-
-
-
-function deEnigmate(s){
-	try{
-		if(typeof s !== 'string')
-			throw new Error('Must be a string!');
-
-		var message = "";
-
-		for(var i = 0; i < s.length; i++){
-
-			var r = s.charAt(i);
-			atRotor = rotorSettings.length - 1;
-			
-			for(var j = rotorSettings.length - 1; j >= 0; j--){
-				r = deRotorize(r);
-			}
-
-			message = message + r;
+		for(var j = 0; j < rotorSettings.length; j++){
+			r = rotorize(r);
 		}
 
-		return message;
+		atRotor = 0;
 
-	} catch(e){
-		console.log('Error: ' + e.message);
+		message = message + r;
+
+		step(); //this makes the polyalphabet;
+
 	}
-}//end of deEnigmate
 
-function deRotorize(c){
-	if(typeof c !== 'string')
-		throw new Error('Must enter a single character string into deRotorize!');
-	if(c.length > 1)
-		throw new Error('Must only enter one character!');
-	if(sequence === 'capAlpha'){
+	return message;
 
-		if(c == ' ')
-			return c;
-
-		var k = c.charCodeAt(0);
-		var n = rotorSettings.charCodeAt(atRotor);
-
-		atRotor--;
-
-		k = k - 65;
-		n = n - 65;
-
-		if(k - n > 0)
-			return String.fromCharCode((k - n) % 26 + 65);
-		else 
-			return String.fromCharCode((k - n + 26) % 26 + 65);
-
-		//end of capAlpha
-	}
-}//end of deRotorize
-
-function deAlphCrypt(){
-	
 }
 
-var message = "HI HOW ARE YOU";
-console.log(enigmate(message));
-console.log(deEnigmate(enigmate(message)));
+function step(){
+
+	var newSettings = "";
+
+	for(var i = 0; i < rotorSettings.length; i++){
+
+		var n = rotorSettings.charCodeAt(i);
+
+		n = n - 65;
+		var c = String.fromCharCode((n + i + 1) % 26 + 65);
+
+		newSettings = newSettings + c;
+
+	}
+
+	rotorSettings = newSettings;
+
+	return;
+
+	//this is where the rotorSettings should be incrementally stepped
+
+}
+
+function rotorize(c){
+
+	//this is where the letter in the message should be passed through all other points
+
+	var k = c.charCodeAt(0);
+	var n = rotorSettings.charCodeAt(atRotor);
+	atRotor++;
+
+	//ERROR HANDLING
+	if(!(k >= 65 && k <= 90 || k == 32))
+		throw new Error('Can only ROTORIZE capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
+	if(!(n >= 65 && n <= 90))
+		throw new Error('Can only use capital letters in Rotor Settings when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your Rotor Settings to be only cap letters');
+	if(k == 32)
+		return " ";
+
+	k = k - 65;
+	n = n - 65;
+	var num = (k + n) % 26 + 65;
+
+	var out = String.fromCharCode(num);
+
+	return out;
+
+}
+
+
+console.log(enigmate('ADD'));
+console.log(rotorSettings);
