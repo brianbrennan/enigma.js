@@ -1,64 +1,83 @@
+
 //settings
+var rotorSettings = 'IWANNAROCKANDROLLALLNIGHT';
+var atRotor = 0;
 
-var sequence = 'ascii'; // 'capAlpha', 'alpha', 'alphaNumeric', 'ascii'
-var rotorSettings = 'boom';
-var plugSettings = ['ZT','HE'];
-
-//functions
 
 function enigmate(s){
-	if(typeof s !== 'string')
-		return 'Must send a string';
+
+	//this is where the functionality of the parts should go
 
 	var message = "";
 
 	for(var i = 0; i < s.length; i++){
-		var r = s.charAt(i);
+
+		step(); //this makes the polyalphabet;
+
+		var r = s[i];
+
 		for(var j = 0; j < rotorSettings.length; j++){
 			r = rotorize(r);
 		}
-		r = plugify(r);
+
 		atRotor = 0;
+
 		message = message + r;
+
 	}
 
 	return message;
+
 }
 
-var atRotor = 0;
+function step(){
 
-function rotorize(c){//provides functionality of a single rotor 
-	if(typeof c !== 'string')
-		return 'Must send a string';
-	if(c.length > 1){
-		return 'Must only send one letter at a time';
-	}
-	if(sequence === 'capAlpha'){
+	var newSettings = "";
 
-		
-	} else if(sequence === 'alpha'){
+	for(var i = 0; i < rotorSettings.length; i++){
 
-		
-	} else if(sequence === 'ascii'){
-		var n = rotorSettings[atRotor].charCodeAt(0);
-		atRotor++;
-		var k = c.charCodeAt(0);
+		var n = rotorSettings.charCodeAt(i);
 
-		return String.fromCharCode((k + n) % 256);
-	}
-}//end of rotorize
+		n = n - 65;
+		var c = String.fromCharCode((n + i + 1) % 26 + 65);
 
-function plugify(c){
-	for(var i = 0; i < plugSettings.length; i++){
-		if(plugSettings[i].charAt(0) === plugSettings[i].charAt(1))
-			return 'Plug must go into a different letter';
-		if(c == plugSettings[i].charAt(0))
-			return plugSettings[i].charAt(1);
+		newSettings = newSettings + c;
+
 	}
 
-	return c;
-}//end of plugify
+	rotorSettings = newSettings;
+
+	return;
+
+	//this is where the rotorSettings should be incrementally stepped
+
+}
+
+function rotorize(c){
+
+	//this is where the letter in the message should be passed through all other points
+
+	var k = c.charCodeAt(0);
+	var n = rotorSettings.charCodeAt(atRotor);
+	atRotor++;
+
+	//ERROR HANDLING
+	if(!(k >= 65 && k <= 90 || k == 32))
+		throw new Error('Can only ROTORIZE capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
+	if(!(n >= 65 && n <= 90))
+		throw new Error('Can only use capital letters in Rotor Settings when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your Rotor Settings to be only cap letters');
+	if(k == 32)
+		return " ";
+
+	k = k - 65;
+	n = n - 65;
+	var num = (k + n) % 26 + 65;
+
+	var out = String.fromCharCode(num);
+
+	return out;
+
+}
 
 
-
-console.log(enigmate('Hey, how ya doing'));
+console.log(enigmate('FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS CAME FORTH AND G'));
