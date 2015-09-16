@@ -101,4 +101,4 @@ function deRotorize(c){
 
 
 
-console.log(deEnigmate('BXQA BYXNN JJM BAEAW HAJNB JCX XQA OWCDNNB LWVA BXNCD'));
+console.log(deEnigmate('BXQA BYXNN JJM BAEAW HAJNB JCX XQA OWCDNNB LWVA BXNCD WWZ C'));

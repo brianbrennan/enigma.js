@@ -80,4 +80,4 @@ function rotorize(c){
 }
 
 
-console.log(enigmate('FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS CAME FORTH'));
+console.log(enigmate('FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS CAME FORTH AND G'));
