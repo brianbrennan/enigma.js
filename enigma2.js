@@ -10,8 +10,6 @@ function deEnigmate(s){
 		step();
 	}
 
-	console.log(rotorSettings);
-
 	var message = "";
 
 	for(var i = 0; i < s.length; i++){
@@ -103,4 +101,4 @@ function deRotorize(c){
 
 
 
-console.log(deEnigmate('FTGDVZX YZ QKN EVUTED'));
+console.log(deEnigmate('BXQA BYXNN JJM BAEAW HAJNB JCX XQA OWCDNNB LWVA BXNCD'));

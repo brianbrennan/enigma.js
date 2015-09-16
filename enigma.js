@@ -80,5 +80,4 @@ function rotorize(c){
 }
 
 
-console.log(enigmate('WELCOME TO THE JUNGLE'));
-console.log(rotorSettings);
+console.log(enigmate('FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS CAME FORTH'));
