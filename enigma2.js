@@ -1,6 +1,6 @@
 
 //settings
-var rotorSettings = "OEL";
+var rotorSettings = "IWANNAROCKANDROLLALLNIGHT";
 var atRotor = rotorSettings.length - 1;
 
 
@@ -10,13 +10,13 @@ function deEnigmate(s){
 		step();
 	}
 
+	console.log(rotorSettings);
+
 	var message = "";
 
 	for(var i = 0; i < s.length; i++){
 
 		var r = s[i];
-
-		deStep();
 
 		for(var j = 0; j < rotorSettings.length; j++){
 			r = deRotorize(r);
@@ -26,9 +26,11 @@ function deEnigmate(s){
 
 		message = message + r;
 
+		deStep();
+
 	}
 
-	console.log(rotorSettings);
+	
 
 	return message;
 }
@@ -60,7 +62,7 @@ function deStep(){
 
 	var newSettings = "";
 
-	for(var i = 0; i < rotorSettings.length; i++){
+	for(var i = rotorSettings.length - 1; i >= 0; i--){
 
 		var n = rotorSettings.charCodeAt(i);
 
@@ -85,6 +87,9 @@ function deRotorize(c){
 	var n = rotorSettings.charCodeAt(atRotor);
 	atRotor--;
 
+	if(k == 32)
+		return " ";
+
 
 
 	k = k - 65;
@@ -98,4 +103,4 @@ function deRotorize(c){
 
 
 
-console.log(deEnigmate('VIS'));
+console.log(deEnigmate('FTGDVZX YZ QKN EVUTED'));

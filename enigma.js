@@ -1,6 +1,6 @@
 
 //settings
-var rotorSettings = 'OEL';
+var rotorSettings = 'IWANNAROCKANDROLLALLNIGHT';
 var atRotor = 0;
 
 
@@ -12,6 +12,8 @@ function enigmate(s){
 
 	for(var i = 0; i < s.length; i++){
 
+		step(); //this makes the polyalphabet;
+
 		var r = s[i];
 
 		for(var j = 0; j < rotorSettings.length; j++){
@@ -21,8 +23,6 @@ function enigmate(s){
 		atRotor = 0;
 
 		message = message + r;
-
-		step(); //this makes the polyalphabet;
 
 	}
 
@@ -80,5 +80,5 @@ function rotorize(c){
 }
 
 
-console.log(enigmate('ADD'));
+console.log(enigmate('WELCOME TO THE JUNGLE'));
 console.log(rotorSettings);
