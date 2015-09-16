@@ -26,8 +26,6 @@ function enigmate(s){
 
 	}
 
-	console.log(rotorSettings);
-
 	return message;
 
 }
@@ -41,15 +39,13 @@ function step(){
 		var n = rotorSettings.charCodeAt(i);
 
 		n = n - 65;
-		var c = String.fromCharCode((n + Math.pow(i + 1, 2)) % 26 + 65);
+		var c = String.fromCharCode((n + i + 1) % 26 + 65);
 
 		newSettings = newSettings + c;
 
 	}
 
 	rotorSettings = newSettings;
-
-	console.log(rotorSettings);
 
 	return;
 
@@ -84,53 +80,20 @@ function rotorize(c){
 }
 
 function deEnigmate(s){
-	var message = "";
 
-	for(var i = 0; i < s.length; i++){
-		deStep();
 
-		var r = s[i];
-
-		for(var j = 0; j < rotorSettings.length; j++){
-			r = rotorize(r);
-		}
-
-		atRotor = 0;
-
-		message = message + r;
-	}
-
-	return message;
+	
 }
 
 function deStep(){
-	var newSettings = "";
-
-	for(var i = 0; i < rotorSettings.length; i++){
-
-		var n = rotorSettings.charCodeAt(i);
-
-		n = n - 65;
-		var c = String.fromCharCode((n + Math.pow(i + 1, 1/2)) % 26 + 65);
-
-		newSettings = newSettings + c;
-
-	}
-
-	rotorSettings = newSettings;
-
-	return;
+	
 }
 
-function backStep(){
-
-}
-
-function deRotorize(){
-
+function deRotorize(c){
+	
 }
 
 
 
-console.log(enigmate('WELCOME TO THE JUNGLE BABY'));
-console.log(deEnigmate(enigmate('WELCOME TO THE JUNGLE BABY')));
+console.log(enigmate('A'));
+console.log(deEnigmate(enigmate('A')));
