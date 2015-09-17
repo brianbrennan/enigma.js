@@ -1,5 +1,6 @@
 //Settings
 var rotorSettings = "WAADERISTGUT";
+var sequence = 'ascii';
 var atRotor = 0;
 
 //Functions
@@ -29,16 +30,30 @@ function enigmate(s){
 
 function rotorize(c){
 
-	var givenCharCode = c.charCodeAt(0) - 65;
-	var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
-	atRotor++;
+	if(sequence == 'caps'){
 
-	if(givenCharCode == -33)
-		return ' ';
+		var givenCharCode = c.charCodeAt(0) - 65;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
+		atRotor++;
 
-	var num = (givenCharCode + rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
+		if(givenCharCode == -33)
+			return ' ';
 
-	return String.fromCharCode(num);
+		var num = (givenCharCode + rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
+
+		return String.fromCharCode(num);
+	} else if (sequence == 'ascii') {
+		var givenCharCode = c.charCodeAt(0) - 32;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
+		atRotor++;
+
+		if(givenCharCode == 0)
+			return ' ';
+
+		var num = (givenCharCode + rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
+
+		return String.fromCharCode(num);
+	}
 }
 
 function step(){
@@ -77,16 +92,29 @@ function decrypt(s){
 }
 
 function deRotorize(c){
-	var givenCharCode = c.charCodeAt(0) - 65;
-	var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
+	if(sequence == 'caps'){
+		var givenCharCode = c.charCodeAt(0) - 65;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
 
-	if(givenCharCode == -33)
-		return ' ';
-	atRotor--;
+		if(givenCharCode == -33)
+			return ' ';
+		atRotor--;
 
-	var num = (givenCharCode - rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
+		var num = (givenCharCode - rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
 
-	return String.fromCharCode(num);
+		return String.fromCharCode(num);
+	} else if (sequence == 'ascii') {
+		var givenCharCode = c.charCodeAt(0) - 32;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
+
+		if(givenCharCode == 0)
+			return ' ';
+		atRotor--;
+
+		var num = (givenCharCode - rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
+
+		return String.fromCharCode(num);
+	}
 }
 
 function deStep(){
@@ -98,8 +126,8 @@ function deStep(){
 	rotorSettings = newSettings;
 }
 
-console.log(enigmate('HELLO THERE THIS IS'));
+console.log(enigmate('I walked in just the other day, and I wan\'ted to see my friend. Let\'s see if this works'));
 
-console.log(decrypt('ZIBNC FFONM ZZMI WS'))
+console.log(decrypt('; $ 1<BM j  2IS` xx$ FWW`y &/So _xz w `Vo40-8  g &$0    m(  HJ  V{9UP hfr 1: ``m& BFUZ'))
 
 
