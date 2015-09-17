@@ -1,6 +1,6 @@
 //Settings
 var rotorSettings = "WAADERISTGUT";
-var sequence = 'caps';
+var sequence = 'ascii';
 var atRotor = 0;
 
 //Functions
