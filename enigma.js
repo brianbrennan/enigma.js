@@ -1,83 +1,167 @@
-
-//settings
-var rotorSettings = 'IWANNAROCKANDROLLALLNIGHT';
+//Settings
+var rotorSettings = "WAADERISTGUT";
+var sequence = 'caps';
 var atRotor = 0;
 
+//Functions
 
 function enigmate(s){
-
-	//this is where the functionality of the parts should go
-
 	var message = "";
+	var saveSettings = rotorSettings;
 
 	for(var i = 0; i < s.length; i++){
+		step();
 
-		step(); //this makes the polyalphabet;
-
-		var r = s[i];
+		var addChar = s[i];
 
 		for(var j = 0; j < rotorSettings.length; j++){
-			r = rotorize(r);
+			addChar = rotorize(addChar);
 		}
 
 		atRotor = 0;
 
-		message = message + r;
-
+		message = message + addChar;
 	}
+
+	rotorSettings = saveSettings;
 
 	return message;
-
-}
-
-function step(){
-
-	var newSettings = "";
-
-	for(var i = 0; i < rotorSettings.length; i++){
-
-		var n = rotorSettings.charCodeAt(i);
-
-		n = n - 65;
-		var c = String.fromCharCode((n + i + 1) % 26 + 65);
-
-		newSettings = newSettings + c;
-
-	}
-
-	rotorSettings = newSettings;
-
-	return;
-
-	//this is where the rotorSettings should be incrementally stepped
-
 }
 
 function rotorize(c){
 
-	//this is where the letter in the message should be passed through all other points
+	if(sequence == 'caps'){
 
-	var k = c.charCodeAt(0);
-	var n = rotorSettings.charCodeAt(atRotor);
-	atRotor++;
+		var givenCharCode = c.charCodeAt(0) - 65;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
+		atRotor++;
 
-	//ERROR HANDLING
-	if(!(k >= 65 && k <= 90 || k == 32))
-		throw new Error('Can only ROTORIZE capital letters when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your input to be only cap letters');
-	if(!(n >= 65 && n <= 90))
-		throw new Error('Can only use capital letters in Rotor Settings when SEQUENCE is set to "capAlpha"! \nEither change your SEQUENCE to the appropriate decyphering method, or change your Rotor Settings to be only cap letters');
-	if(k == 32)
-		return " ";
+		if(givenCharCode == -33)
+			return ' ';
 
-	k = k - 65;
-	n = n - 65;
-	var num = (k + n) % 26 + 65;
+		var num = (givenCharCode + rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
 
-	var out = String.fromCharCode(num);
+		return String.fromCharCode(num);
+	} else if (sequence == 'ascii') {
+		var givenCharCode = c.charCodeAt(0) - 32;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
+		atRotor++;
 
-	return out;
+		var num = (givenCharCode + rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
 
+		return String.fromCharCode(num);
+	}
 }
 
+function step(){
+	var newSettings = "";
+	for(var i = 0; i < rotorSettings.length; i++){
+		newSettings = newSettings + String.fromCharCode(rotorSettings.charCodeAt(i) + 1);
+	}
 
-console.log(enigmate('FOUR SCORE AND SEVEN YEARS AGO OUR FATHERS CAME FORTH ANDS'));
+	rotorSettings = newSettings;
+}
+
+function decrypt(s){
+	var message = "";
+	var saveSettings = rotorSettings;
+	atRotor = rotorSettings.length - 1;
+
+	for(var i = 0; i < s.length; i++){//get to point that rotor settings should be
+		step();
+	}
+
+	for(var i = s.length - 1; i >= 0; i--){
+		var addChar = s[i];
+
+		for(var j = rotorSettings.length - 1; j >= 0; j--){
+			addChar = deRotorize(addChar);
+		}
+		atRotor = rotorSettings.length - 1;
+		deStep();
+
+		message = addChar + message;
+	}
+
+	rotorSettings = saveSettings;
+
+	return message;
+}
+
+function deRotorize(c){
+	if(sequence == 'caps'){
+		var givenCharCode = c.charCodeAt(0) - 65;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 65;
+
+		if(givenCharCode == -33)
+			return ' ';
+		atRotor--;
+
+		var num = (givenCharCode - rotorCharCode + (26 * rotorSettings.length)) % 26 + 65;
+
+		return String.fromCharCode(num);
+	} else if (sequence == 'ascii') {
+		var givenCharCode = c.charCodeAt(0) - 32;
+		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
+
+		atRotor--;
+
+		var num = (givenCharCode - rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
+
+		return String.fromCharCode(num);
+	}
+}
+
+function deStep(){
+	var newSettings = "";
+	for(var i = 0; i < rotorSettings.length; i++){
+		newSettings = newSettings + String.fromCharCode(rotorSettings.charCodeAt(i) - 1);
+	}
+
+	rotorSettings = newSettings;
+}
+
+var fs = require('fs');
+
+var file;
+
+fs.readFile('input.txt', function (err, data) {
+	if (err) {
+		return console.error(err);
+	}
+	file = data.toString();
+
+	file = enigmate(file);
+
+
+	fs.writeFile('encrypted.txt', file, function(err, data){
+		if (err) {
+			return console.error(err);
+		}
+
+		console.log('successfully encrypted file');
+	});
+});
+
+fs.readFile('encrypted.txt', function (err, data) {
+	if (err) {
+		return console.error(err);
+	}
+	file = data.toString();
+
+	file = decrypt(file);
+
+
+	fs.writeFile('decrypted.txt', file, function(err, data){
+		if (err) {
+			return console.error(err);
+		}
+
+		console.log('successfully decrypted file');
+	});
+});
+
+
+
+
+
