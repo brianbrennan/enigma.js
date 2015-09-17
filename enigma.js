@@ -1,6 +1,6 @@
 //Settings
 var rotorSettings = "WAADERISTGUT";
-var sequence = 'ascii';
+var sequence = 'caps';
 var atRotor = 0;
 
 //Functions
@@ -46,9 +46,6 @@ function rotorize(c){
 		var givenCharCode = c.charCodeAt(0) - 32;
 		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
 		atRotor++;
-
-		if(givenCharCode == 0)
-			return ' ';
 
 		var num = (givenCharCode + rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
 
@@ -107,8 +104,6 @@ function deRotorize(c){
 		var givenCharCode = c.charCodeAt(0) - 32;
 		var rotorCharCode = rotorSettings.charCodeAt(atRotor) - 32;
 
-		if(givenCharCode == 0)
-			return ' ';
 		atRotor--;
 
 		var num = (givenCharCode - rotorCharCode + (93 * rotorSettings.length)) % 93 + 32;
@@ -126,8 +121,47 @@ function deStep(){
 	rotorSettings = newSettings;
 }
 
-console.log(enigmate('I walked in just the other day, and I wan\'ted to see my friend. Let\'s see if this works'));
+var fs = require('fs');
 
-console.log(decrypt('; $ 1<BM j  2IS` xx$ FWW`y &/So _xz w `Vo40-8  g &$0    m(  HJ  V{9UP hfr 1: ``m& BFUZ'))
+var file;
+
+fs.readFile('input.txt', function (err, data) {
+	if (err) {
+		return console.error(err);
+	}
+	file = data.toString();
+
+	file = enigmate(file);
+
+
+	fs.writeFile('encrypted.txt', file, function(err, data){
+		if (err) {
+			return console.error(err);
+		}
+
+		console.log('successfully encrypted file');
+	});
+});
+
+fs.readFile('encrypted.txt', function (err, data) {
+	if (err) {
+		return console.error(err);
+	}
+	file = data.toString();
+
+	file = decrypt(file);
+
+
+	fs.writeFile('decrypted.txt', file, function(err, data){
+		if (err) {
+			return console.error(err);
+		}
+
+		console.log('successfully decrypted file');
+	});
+});
+
+
+
 
 
