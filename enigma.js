@@ -1,4 +1,4 @@
-(function Enigma(i, s){
+function Enigma(i, s){
 
 	if(typeof i === 'string'){
 		this.rotorSettings = i;
@@ -135,4 +135,3 @@ Enigma.prototype = {
 };
 
 module.exports = Enigma;
-)();
