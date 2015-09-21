@@ -1,6 +1,6 @@
 {
   "name": "enigma.js",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "An encryption tool based on the german Enigma Machine",
   "main": "enigma.js",
   "scripts": {

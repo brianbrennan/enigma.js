@@ -1,4 +1,4 @@
-(function Enigma(i, s){
+function Enigma(i, s){
 
 	if(typeof i === 'string'){
 		this.rotorSettings = i;
@@ -8,16 +8,22 @@
 		else
 			this.sequence = 'ascii';
 		this.atRotor = 0;
+		this.spaces = false;
 	} else if(typeof i === 'object'){
 		if(typeof i.rotorSettings === 'string')
 			this.rotorSettings = i.rotorSettings;
 		if(typeof i.sequence === 'string')
 			this.sequence = i.sequence;
+		if(typeof i.spaces === 'boolean')
+			this.spaces = i.spaces;
+		else
+			this.spaces = false;
 		this.atRotor = 0;
 	} else if(typeof i === 'undefined'){
 		this.rotorSettings = 'ENIGMA';
 		this.sequence = 'ascii';
 		this.atRotor = 0;
+		this.spaces = false;
 	}
 }
 
@@ -51,18 +57,57 @@ Enigma.prototype = {
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 65;
 			this.atRotor++;
 
-			if(givenCharCode == -33)
+			if(givenCharCode == -33 && this.spaces == true)
 				return ' ';
 
 			var num = (givenCharCode + rotorCharCode + (26 * this.rotorSettings.length)) % 26 + 65;
 
 			return String.fromCharCode(num);
-		} else if (this.sequence == 'ascii') {
+		} else if(this.sequence == 'ascii') {
 			var givenCharCode = c.charCodeAt(0) - 32;
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 32;
 			this.atRotor++;
 
 			var num = (givenCharCode + rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
+
+			return String.fromCharCode(num);
+		} else if(this.sequence === 'alphanumeric'){
+			var givenCharCode = c.charCodeAt(0);
+			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor);
+			this.atRotor++;
+
+			if(givenCharCode == 32 && this.spaces == true)
+				return ' ';
+
+			var diff;
+
+			if(givenCharCode >= 48 && givenCharCode <= 57){
+				diff = 48;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 65 && givenCharCode <= 90){
+				diff = 55;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 97 && givenCharCode <= 122){
+				diff = 61;
+				givenCharCode = givenCharCode - diff;
+			}
+
+			if(rotorCharCode >= 48 && rotorCharCode <= 57){
+				rotorCharCode = rotorCharCode - 48;
+			} else if(rotorCharCode >= 65 && rotorCharCode <= 90){
+				rotorCharCode = rotorCharCode - 55;
+			} else if(rotorCharCode >= 97 && rotorCharCode <= 122){
+				rotorCharCode = rotorCharCode - 61;
+			}
+
+			var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62;
+
+			if(num >= 0 && num <= 9)
+				num = num + 48;
+			else if(num >= 10 && num <= 35)
+				num = num + 55;
+			else if(num >= 36 && num <= 61)
+				num = num + 61;
 
 			return String.fromCharCode(num);
 		}
@@ -106,7 +151,7 @@ Enigma.prototype = {
 			var givenCharCode = c.charCodeAt(0) - 65;
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 65;
 
-			if(givenCharCode == -33)
+			if(givenCharCode == -33 && this.spaces == true)
 				return ' ';
 			this.atRotor--;
 
@@ -122,6 +167,51 @@ Enigma.prototype = {
 			var num = (givenCharCode - rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
 
 			return String.fromCharCode(num);
+		} else if(this.sequence === 'alphanumeric'){
+			var givenCharCode = c.charCodeAt(0);
+			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor);
+			this.atRotor--;
+
+			if(givenCharCode == 32 && this.spaces == true)
+				return ' ';
+
+			var diff;
+
+			if(givenCharCode >= 48 && givenCharCode <= 57){
+				diff = 48;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 65 && givenCharCode <= 90){
+				diff = 55;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 97 && givenCharCode <= 122){
+				diff = 61;
+				givenCharCode = givenCharCode - diff;
+			}
+
+			if(rotorCharCode >= 48 && rotorCharCode <= 57){
+				rotorCharCode = rotorCharCode - 48;
+			} else if(rotorCharCode >= 65 && rotorCharCode <= 90){
+				rotorCharCode = rotorCharCode - 55;
+			} else if(rotorCharCode >= 97 && rotorCharCode <= 122){
+				rotorCharCode = rotorCharCode - 61;
+			}
+
+			var num = (givenCharCode - rotorCharCode + (62 * this.rotorSettings.length)) % 62;
+
+			if(num >= 0 && num <= 9)
+				num = num + 48;
+			else if(num >= 10 && num <= 35)
+				num = num + 55;
+			else if(num >= 36 && num <= 61)
+				num = num + 61;
+
+			return String.fromCharCode(num);
+
+			// var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62 + diff;
+
+			// console.log(num);
+
+			// return String.fromCharCode(num);
 		}
 	},
 	deStep: function(){
@@ -135,4 +225,3 @@ Enigma.prototype = {
 };
 
 module.exports = Enigma;
-)();
