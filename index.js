@@ -2,6 +2,6 @@ var Enigma = require('./enigma');
 
 var e = new Enigma('HI');
 
-console.log(e.encrypt('HELLO THERE'));
+console.log(e.encrypt('!understated_devil@yahoo.com'));
 
-console.log(e.decrypt('>=FHM VLKZO'));
+console.log(e.decrypt('tmh`cruxg|opmtw-"\'Z8"+46T.<<'));
