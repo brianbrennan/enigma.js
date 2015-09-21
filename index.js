@@ -1,7 +1,8 @@
 var Enigma = require('./enigma');
 
-var e = new Enigma('HI');
+var e = new Enigma({
+	sequence: 'alphanumeric',
+	rotorSettings: 'ae3'
+});
 
-console.log(e.encrypt('!understated_devil@yahoo.com'));
-
-console.log(e.decrypt('tmh`cruxg|opmtw-"\'Z8"+46T.<<'));
+console.log(e.decrypt('f1JLgC1tIJE0acUaq3CnE'));

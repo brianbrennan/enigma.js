@@ -57,7 +57,7 @@ Enigma.prototype = {
 			var num = (givenCharCode + rotorCharCode + (26 * this.rotorSettings.length)) % 26 + 65;
 
 			return String.fromCharCode(num);
-		} else if (this.sequence == 'ascii') {
+		} else if(this.sequence == 'ascii') {
 			var givenCharCode = c.charCodeAt(0) - 32;
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 32;
 			this.atRotor++;
@@ -65,6 +65,48 @@ Enigma.prototype = {
 			var num = (givenCharCode + rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
 
 			return String.fromCharCode(num);
+		} else if(this.sequence === 'alphanumeric'){
+			var givenCharCode = c.charCodeAt(0);
+			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor);
+			this.atRotor++;
+
+			var diff;
+
+			if(givenCharCode >= 48 && givenCharCode <= 57){
+				diff = 48;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 65 && givenCharCode <= 90){
+				diff = 55;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 97 && givenCharCode <= 122){
+				diff = 61;
+				givenCharCode = givenCharCode - diff;
+			}
+
+			if(rotorCharCode >= 48 && rotorCharCode <= 57){
+				rotorCharCode = rotorCharCode - 48;
+			} else if(rotorCharCode >= 65 && rotorCharCode <= 90){
+				rotorCharCode = rotorCharCode - 55;
+			} else if(rotorCharCode >= 97 && rotorCharCode <= 122){
+				rotorCharCode = rotorCharCode - 61;
+			}
+
+			var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62;
+
+			if(num >= 0 && num <= 9)
+				num = num + 48;
+			else if(num >= 10 && num <= 35)
+				num = num + 55;
+			else if(num >= 36 && num <= 61)
+				num = num + 61;
+
+			return String.fromCharCode(num);
+
+			// var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62 + diff;
+
+			// console.log(num);
+
+			// return String.fromCharCode(num);
 		}
 	},
 	step: function(){
@@ -122,6 +164,48 @@ Enigma.prototype = {
 			var num = (givenCharCode - rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
 
 			return String.fromCharCode(num);
+		} else if(this.sequence === 'alphanumeric'){
+			var givenCharCode = c.charCodeAt(0);
+			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor);
+			this.atRotor--;
+
+			var diff;
+
+			if(givenCharCode >= 48 && givenCharCode <= 57){
+				diff = 48;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 65 && givenCharCode <= 90){
+				diff = 55;
+				givenCharCode = givenCharCode - diff;
+			} else if(givenCharCode >= 97 && givenCharCode <= 122){
+				diff = 61;
+				givenCharCode = givenCharCode - diff;
+			}
+
+			if(rotorCharCode >= 48 && rotorCharCode <= 57){
+				rotorCharCode = rotorCharCode - 48;
+			} else if(rotorCharCode >= 65 && rotorCharCode <= 90){
+				rotorCharCode = rotorCharCode - 55;
+			} else if(rotorCharCode >= 97 && rotorCharCode <= 122){
+				rotorCharCode = rotorCharCode - 61;
+			}
+
+			var num = (givenCharCode - rotorCharCode + (62 * this.rotorSettings.length)) % 62;
+
+			if(num >= 0 && num <= 9)
+				num = num + 48;
+			else if(num >= 10 && num <= 35)
+				num = num + 55;
+			else if(num >= 36 && num <= 61)
+				num = num + 61;
+
+			return String.fromCharCode(num);
+
+			// var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62 + diff;
+
+			// console.log(num);
+
+			// return String.fromCharCode(num);
 		}
 	},
 	deStep: function(){
