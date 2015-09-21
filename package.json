@@ -1,0 +1,22 @@
+{
+  "name": "enigma.js",
+  "version": "0.8.0",
+  "description": "An encryption tool based on the german Enigma Machine",
+  "main": "enigma.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brianbrennan/enigma.js.git"
+  },
+  "keywords": [
+    "Encryption"
+  ],
+  "author": "Brian Brennan <me@brianbrennan.com> (http://brianbrennan.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/brianbrennan/enigma.js/issues"
+  },
+  "homepage": "https://github.com/brianbrennan/enigma.js"
+}
