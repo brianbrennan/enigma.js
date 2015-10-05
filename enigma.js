@@ -115,7 +115,7 @@ Enigma.prototype = {
 	step: function(){
 		var newSettings = "";
 		for(var i = 0; i < this.rotorSettings.length; i++){
-			newSettings = newSettings + String.fromCharCode(this.rotorSettings.charCodeAt(i) + 1);
+			newSettings = newSettings + String.fromCharCode((this.rotorSettings.charCodeAt(i) + 1) % 256);
 		}
 
 		this.rotorSettings = newSettings;
@@ -207,17 +207,12 @@ Enigma.prototype = {
 
 			return String.fromCharCode(num);
 
-			// var num = (givenCharCode + rotorCharCode + (62 * this.rotorSettings.length)) % 62 + diff;
-
-			// console.log(num);
-
-			// return String.fromCharCode(num);
 		}
 	},
 	deStep: function(){
 		var newSettings = "";
 		for(var i = 0; i < this.rotorSettings.length; i++){
-			newSettings = newSettings + String.fromCharCode(this.rotorSettings.charCodeAt(i) - 1);
+			newSettings = newSettings + String.fromCharCode((this.rotorSettings.charCodeAt(i) - 1 + 256) % 256);
 		}
 
 		this.rotorSettings = newSettings;
