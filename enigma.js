@@ -68,6 +68,12 @@ Enigma.prototype = {
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 32;
 			this.atRotor++;
 
+			if(this.spaces == true){
+				if(this.escapeChar(givenCharCode)){
+					return this.escapeChar(givenCharCode);
+				}
+			}
+
 			var num = (givenCharCode + rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
 
 			return String.fromCharCode(num);
@@ -78,6 +84,7 @@ Enigma.prototype = {
 
 			if(givenCharCode == 32 && this.spaces == true)
 				return ' ';
+
 
 			var diff;
 
@@ -162,6 +169,12 @@ Enigma.prototype = {
 			var givenCharCode = c.charCodeAt(0) - 32;
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 32;
 
+			if(this.spaces == true){
+				if(this.escapeChar(givenCharCode)){
+					return this.escapeChar(givenCharCode);
+				}
+			}
+
 			this.atRotor--;
 
 			var num = (givenCharCode - rotorCharCode + (93 * this.rotorSettings.length)) % 93 + 32;
@@ -216,6 +229,28 @@ Enigma.prototype = {
 		}
 
 		this.rotorSettings = newSettings;
+	},
+	escapeChar: function(n){
+		switch(n){
+			case -19: 
+				return '\r';
+				break;
+			case -21:
+				return '\v';
+				break;
+			case -22:
+				return '\n';
+				break;
+			case -23:
+				return '\t';
+				break;
+			case -24: 
+				return '\b';
+				break;
+			default:
+				return;
+				break;
+		}
 	}
 };
 
