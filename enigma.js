@@ -57,8 +57,11 @@ Enigma.prototype = {
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 65;
 			this.atRotor++;
 
-			if(givenCharCode == -33 && this.spaces == true)
-				return ' ';
+			if(this.spaces == true){
+				if(this.escapeChar(givenCharCode + 65)){
+					return this.escapeChar(givenCharCode + 65);
+				}
+			}
 
 			var num = (givenCharCode + rotorCharCode + (26 * this.rotorSettings.length)) % 26 + 65;
 
@@ -69,8 +72,8 @@ Enigma.prototype = {
 			this.atRotor++;
 
 			if(this.spaces == true){
-				if(this.escapeChar(givenCharCode)){
-					return this.escapeChar(givenCharCode);
+				if(this.escapeChar(givenCharCode + 32)){
+					return this.escapeChar(givenCharCode + 32);
 				}
 			}
 
@@ -158,8 +161,12 @@ Enigma.prototype = {
 			var givenCharCode = c.charCodeAt(0) - 65;
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 65;
 
-			if(givenCharCode == -33 && this.spaces == true)
-				return ' ';
+			if(this.spaces == true){
+				if(this.escapeChar(givenCharCode + 65)){
+					return this.escapeChar(givenCharCode + 65);
+				}
+			}
+
 			this.atRotor--;
 
 			var num = (givenCharCode - rotorCharCode + (26 * this.rotorSettings.length)) % 26 + 65;
@@ -170,8 +177,8 @@ Enigma.prototype = {
 			var rotorCharCode = this.rotorSettings.charCodeAt(this.atRotor) - 32;
 
 			if(this.spaces == true){
-				if(this.escapeChar(givenCharCode)){
-					return this.escapeChar(givenCharCode);
+				if(this.escapeChar(givenCharCode + 32)){
+					return this.escapeChar(givenCharCode + 32);
 				}
 			}
 
@@ -232,19 +239,19 @@ Enigma.prototype = {
 	},
 	escapeChar: function(n){
 		switch(n){
-			case -19: 
+			case 13: 
 				return '\r';
 				break;
-			case -21:
+			case 11:
 				return '\v';
 				break;
-			case -22:
+			case 10:
 				return '\n';
 				break;
-			case -23:
+			case 9:
 				return '\t';
 				break;
-			case -24: 
+			case 8: 
 				return '\b';
 				break;
 			default:
